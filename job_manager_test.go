@@ -10,9 +10,9 @@ import (
 	priorityqueue "github.com/xybor-x/priority_queue"
 )
 
-var Urgent = gojm.NewPriority(0)
-var Necessary = gojm.NewPriority(10).WithAging(1 * time.Second)
-var Background = gojm.NewPriority(100)
+var Urgent = gojm.NewPriority("Urgent", 0)
+var Necessary = gojm.NewPriority("Necessary", 10).WithAging(1 * time.Second)
+var Background = gojm.NewPriority("Background", 100)
 
 func Test_JobManager_RunOne(t *testing.T) {
 	jm := gojm.New()
@@ -37,18 +37,18 @@ func Test_JobManager_RunOne(t *testing.T) {
 	assert.NoError(t, jm.Schedule(Background, backgroundJob))
 
 	count := 0
-	jm.Hook(func(ctx context.Context, job priorityqueue.Element[*gojm.Job]) {
+	jm.Hook(func(ctx context.Context, job gojm.JobWrapper) {
 		defer func() {
 			count++
 		}()
 
 		switch count {
 		case 0:
-			assert.Equal(t, Urgent, job.OriginalPriority())
+			assert.Equal(t, Urgent, job.OriginalPriority)
 		case 1:
-			assert.Equal(t, Necessary, job.OriginalPriority())
+			assert.Equal(t, Necessary, job.OriginalPriority)
 		case 2:
-			assert.Equal(t, Background, job.OriginalPriority())
+			assert.Equal(t, Background, job.OriginalPriority)
 		default:
 			assert.FailNow(t, "exceed number of jobs")
 		}
@@ -85,18 +85,18 @@ func Test_JobManager_Run1Thread(t *testing.T) {
 	assert.NoError(t, jm.Schedule(Background, backgroundJob))
 
 	count := 0
-	jm.Hook(func(ctx context.Context, job priorityqueue.Element[*gojm.Job]) {
+	jm.Hook(func(ctx context.Context, job gojm.JobWrapper) {
 		defer func() {
 			count++
 		}()
 
 		switch count {
 		case 0:
-			assert.Equal(t, Urgent, job.OriginalPriority())
+			assert.Equal(t, Urgent, job.OriginalPriority)
 		case 1:
-			assert.Equal(t, Necessary, job.OriginalPriority())
+			assert.Equal(t, Necessary, job.OriginalPriority)
 		case 2:
-			assert.Equal(t, Background, job.OriginalPriority())
+			assert.Equal(t, Background, job.OriginalPriority)
 		default:
 			assert.FailNow(t, "exceed number of jobs")
 		}
@@ -142,18 +142,18 @@ func Test_JobManager_AddJobsAfterRun(t *testing.T) {
 	}()
 
 	count := 0
-	jm.Hook(func(ctx context.Context, job priorityqueue.Element[*gojm.Job]) {
+	jm.Hook(func(ctx context.Context, job gojm.JobWrapper) {
 		defer func() {
 			count++
 		}()
 
 		switch count {
 		case 0:
-			assert.Equal(t, Background, job.OriginalPriority())
+			assert.Equal(t, Background, job.OriginalPriority)
 		case 1:
-			assert.Equal(t, Urgent, job.OriginalPriority())
+			assert.Equal(t, Urgent, job.OriginalPriority)
 		case 2:
-			assert.Equal(t, Necessary, job.OriginalPriority())
+			assert.Equal(t, Necessary, job.OriginalPriority)
 		default:
 			assert.FailNow(t, "exceed number of jobs")
 		}

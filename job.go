@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+// Job is the wrapper of a function which allows to wait the result
+// asynchronously.
 type Job struct {
 	mutex sync.Mutex
 	id    any
@@ -15,6 +17,7 @@ type Job struct {
 	resultC chan *JobResult
 }
 
+// NewJob wraps a function to Job.
 func NewJob(f func(ctx context.Context) *JobResult) *Job {
 	return &Job{
 		id:      nil,
@@ -24,6 +27,13 @@ func NewJob(f func(ctx context.Context) *JobResult) *Job {
 	}
 }
 
+// IsCompleted returns true if the job already completed.
+func (j *Job) IsCompleted() bool {
+	return j.GetResult() != nil
+}
+
+// GetResult returns the JobResult if the job already completed. Otherwise, it
+// returns nil.
 func (j *Job) GetResult() *JobResult {
 	if j.result != nil {
 		return j.result
@@ -42,6 +52,8 @@ func (j *Job) GetResult() *JobResult {
 	return j.result
 }
 
+// WaitResult returns the result if the job already completed. Otherwise, it
+// blocks the current process until the job completes.
 func (j *Job) WaitResult(ctx context.Context) *JobResult {
 	if result := j.GetResult(); result != nil {
 		return result
@@ -61,8 +73,14 @@ func (j *Job) WaitResult(ctx context.Context) *JobResult {
 	}
 }
 
-func (j *Job) Execute(ctx context.Context) *JobResult {
+// Exec executes the job and returns the result. Do not call this method
+// multiple times.
+func (j *Job) Exec(ctx context.Context) *JobResult {
 	result := j.f(ctx)
+	if result == nil {
+		result = EmptyResult()
+	}
+
 	result.DoneAt = time.Now()
 
 	j.resultC <- result

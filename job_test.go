@@ -15,7 +15,7 @@ func Test_Job_Execute(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	result := job.Execute(ctx)
+	result := job.Exec(ctx)
 	assert.Equal(t, 1, result.GetInt(nil))
 }
 
@@ -25,7 +25,7 @@ func Test_Job_GetResult(t *testing.T) {
 	})
 
 	ctx := context.Background()
-	job.Execute(ctx)
+	job.Exec(ctx)
 
 	result := job.GetResult()
 	assert.NotNil(t, result)
@@ -40,7 +40,7 @@ func Test_Job_WaitResult(t *testing.T) {
 	ctx := context.Background()
 	go func(ctx context.Context) {
 		time.Sleep(500 * time.Millisecond)
-		job.Execute(ctx)
+		job.Exec(ctx)
 	}(ctx)
 
 	// Run first time.
@@ -63,7 +63,7 @@ func Test_Job_WaitResultTimeout(t *testing.T) {
 	ctx := context.Background()
 	go func(ctx context.Context) {
 		time.Sleep(500 * time.Millisecond)
-		job.Execute(ctx)
+		job.Exec(ctx)
 	}(ctx)
 
 	ctx = context.Background()

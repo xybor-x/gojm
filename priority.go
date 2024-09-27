@@ -35,5 +35,5 @@ func (p Priority) Value() int {
 }
 
 func (p Priority) String() string {
-	return fmt.Sprintf("%s(%d)", p.name, p.value)
+	return fmt.Sprintf("%s(%d)", p.Name(), p.Value())
 }

@@ -2,7 +2,7 @@
 
 A thread-safe and reliable priority-based job manager.
 
-# Job
+## Job
 
 In `gojm`, `job` is only a wrapper of function. You can define a job as below:
 ```golang
@@ -43,7 +43,7 @@ defer cancel()
 result := job.WaitResult(ctx)
 ```
 
-# Job result
+## Job result
 
 If you want to return some values for the job, you can modify JobResult.
 
@@ -77,6 +77,7 @@ job := gojm.NewJob(function(ctx context.Context) *gojm.JobResult {
     result := gojm.EmptyResult()
     result.Set("x", 100)
     result.Set("y", "abc")
+    return result
 })
 
 result := job.Exec(ctx)
@@ -104,7 +105,7 @@ fmt.Println(result.Err)
 // something's wrong
 ```
 
-# Job manager
+## Job manager
 
 You can put jobs into a job manager with a priority to execute it in when
 possible.
@@ -113,7 +114,7 @@ Firstly, you need to create some `Priority`. Every `Priority` has its own value,
 the lower value, the higher priority.
 
 ```golang
-// Urgent is for jobs which need to execute as soon as possible.
+// Urgent is for jobs which need to be executed as soon as possible.
 var Urgent = gojm.NewPriority("Urgent", 0)
 
 // Necessary is for jobs which can be executed later but also need to be
@@ -121,8 +122,9 @@ var Urgent = gojm.NewPriority("Urgent", 0)
 // will be moved to the higher priority).
 var Necessary = gojm.NewPriority("Necessary", 10).WithAging(time.Minute)
 
-// Background is for jobs which can be executed at any time. We must specify we
-// don't need an aging for this priority.
+// Background is for jobs which can be completed no matter of time. We must
+// specify that we don't need an aging (including default aging) for this
+// priority.
 var Background = gojm.NewPriority("Background", 1000).WithNoAging()
 ```
 
@@ -136,7 +138,7 @@ if err := jm.Run(ctx); err != nil {
 }
 ```
 
-You can put job into job manager in other goroutines.
+You can put job into the job manager in other goroutines.
 ```golang
 jm.Schedule(Background, gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
     fmt.Println("Job do something")
@@ -160,9 +162,9 @@ fmt.Println(result.Get(nil))
 // 0
 ```
 
-# Hook
+## Hook
 
-Instead of waiting for the result of each job, you can put a hook function to
+Instead of waiting for the result of each job, you can set a hook function to
 handle the result of all completed jobs.
 
 ```golang

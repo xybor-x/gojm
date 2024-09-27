@@ -12,7 +12,30 @@ import (
 
 var Urgent = gojm.NewPriority("Urgent", 0)
 var Necessary = gojm.NewPriority("Necessary", 10).WithAging(1 * time.Second)
-var Background = gojm.NewPriority("Background", 100)
+var Background = gojm.NewPriority("Background", 100).WithNoAging()
+
+func Test_Priority_String(t *testing.T) {
+	assert.Equal(t, "Urgent(0)", Urgent.String())
+}
+
+func Test_JobManager_AddSamePriority(t *testing.T) {
+	var XUrgent = gojm.NewPriority("XUrgent", 0)
+	jm := gojm.New()
+	jm.AddPriority(Urgent)
+	assert.Panics(t, func() {
+		jm.AddPriority(XUrgent)
+	})
+}
+
+func Test_JobManager_SetDefaultAging(t *testing.T) {
+	jm := gojm.New()
+	jm.SetDefaultJobAging(time.Second)
+}
+
+func Test_JobManager_SetRefreshEvery(t *testing.T) {
+	jm := gojm.New()
+	jm.RefreshEvery(time.Second)
+}
 
 func Test_JobManager_RunOne(t *testing.T) {
 	jm := gojm.New()
@@ -21,15 +44,15 @@ func Test_JobManager_RunOne(t *testing.T) {
 	jm.AddPriority(Background)
 
 	urgentJob := gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
-		return gojm.EmptyResult()
+		return nil
 	})
 
 	neccessaryJob := gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
-		return gojm.EmptyResult()
+		return nil
 	})
 
 	backgroundJob := gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
-		return gojm.EmptyResult()
+		return nil
 	})
 
 	assert.NoError(t, jm.Schedule(Urgent, urgentJob))
@@ -93,6 +116,7 @@ func Test_JobManager_Run1Thread(t *testing.T) {
 		switch count {
 		case 0:
 			assert.Equal(t, Urgent, job.OriginalPriority)
+			assert.True(t, job.Unwrap().IsCompleted())
 		case 1:
 			assert.Equal(t, Necessary, job.OriginalPriority)
 		case 2:

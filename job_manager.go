@@ -35,10 +35,10 @@ func (m *JobManager) AddPriority(p Priority) {
 	}
 }
 
-// SetCommongJobAging sets a timeslice. When the job has existed for more than
+// SetDefaultJobAging sets a timeslice. When the job has existed for more than
 // this timeslice, it will be moved to the higher priority. This timeslice is
 // only applied when the priority hasn't its own aging.
-func (m *JobManager) SetCommonJobAging(timeslice time.Duration) {
+func (m *JobManager) SetDefaultJobAging(timeslice time.Duration) {
 	if err := m.queue.SetCommonAgingTimeSlice(timeslice); err != nil {
 		panic(err)
 	}

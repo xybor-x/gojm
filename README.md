@@ -1,3 +1,13 @@
+[![xybor founder](https://img.shields.io/badge/xybor-huykingsofm-red)](https://github.com/huykingsofm)
+[![Go Reference](https://pkg.go.dev/badge/github.com/xybor-x/gojm.svg)](https://pkg.go.dev/github.com/xybor-x/gojm)
+[![GitHub Repo stars](https://img.shields.io/github/stars/xybor-x/gojm?color=yellow)](https://github.com/xybor-x/gojm)
+[![GitHub top language](https://img.shields.io/github/languages/top/xybor-x/gojm?color=lightblue)](https://go.dev/)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/xybor-x/gojm)](https://go.dev/blog/go1.18)
+[![GitHub release (release name instead of tag name)](https://img.shields.io/github/v/release/xybor-x/gojm?include_prereleases)](https://github.com/xybor-x/gojm/releases/latest)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b17bcb4ba4804277b579a0eb11283658)](https://www.codacy.com/gh/xybor-x/gojm/dashboard?utm_source=github.com&utm_medium=referral&utm_content=xybor-x/gojm&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/2fe10924ab114a08bbbab5d583fd610c)](https://www.codacy.com/gh/xybor-x/gojm/dashboard?utm_source=github.com&utm_medium=referral&utm_content=xybor-x/gojm&utm_campaign=Badge_Grade)
+[![Go Report](https://goreportcard.com/badge/github.com/xybor-x/gojm)](https://goreportcard.com/report/github.com/xybor-x/gojm)
+
 # Introduction
 
 A thread-safe and reliable priority-based job manager.

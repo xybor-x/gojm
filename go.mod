@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/stretchr/testify v1.9.0
-	github.com/xybor-x/priority_queue v0.0.0-20240925180349-e802d9cb9cbf
+	github.com/xybor-x/priority_queue v0.1.0-alpha
 )
 
 require (

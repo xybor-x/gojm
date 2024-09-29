@@ -27,7 +27,7 @@ job := gojm.NewJob(function(ctx context.Context) *gojm.JobResult {
 })
 ```
 
-You can execute the job like you call the function. Note that the method
+You can execute the job like you are calling a function. Note that the method
 `Exec()` should be called only once. The program will panics if you call it
 again.
 
@@ -36,8 +36,8 @@ ctx := context.Background()
 result := job.Exec(ctx)
 ```
 
-You also get the result with blocking mode and non-blocking mode after the job
-already completed. If the job has not completed, the result is nil.
+You also can get the result with non-blocking mode or blocking mode after the
+job had already completed. If the job has not completed yet, the result is nil.
 
 ```golang
 // Non-blocking mode
@@ -55,7 +55,7 @@ result := job.WaitResult(ctx)
 
 ## Job result
 
-If you want to return some values for the job, you can modify JobResult.
+If you want the job returns a value, you can use JobResult.
 
 ```golang
 job := gojm.NewJob(function(ctx context.Context) *gojm.JobResult {
@@ -96,7 +96,7 @@ fmt.Println(result.Get("x"), result.Get("y"))
 // 100 abc
 ```
 
-If you want to return an error, please use `gojm.Err` function.
+Or return an error.
 
 ```golang
 job := gojm.NewJob(function(ctx context.Context) *gojm.JobResult {
@@ -120,8 +120,8 @@ fmt.Println(result.Err)
 You can put jobs into a job manager with a priority to execute it in when
 possible.
 
-Firstly, you need to create some `Priority`. Every `Priority` has its own value,
-the lower value, the higher priority.
+Firstly, you need to create some `Priority` levels. Every `Priority` has its own
+value, the lower value, the higher priority.
 
 ```golang
 // Urgent is for jobs which need to be executed as soon as possible.
@@ -148,19 +148,19 @@ if err := jm.Run(ctx); err != nil {
 }
 ```
 
-You can put job into the job manager in other goroutines.
+You can put job into the job manager in another goroutine.
 ```golang
 jm.Schedule(Background, gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
-    fmt.Println("Job do something")
+    fmt.Println("Do background job")
     return nil
 }))
 ```
 
-Or you can put the job into manager and wait for its result.
+Hold the job object to wait for its result.
 
 ```golang
 urgentJob := gojm.NewJob(func(ctx context.Context) *gojm.JobResult {
-    fmt.Println("Do urgent work")
+    fmt.Println("Do urgent job")
     return gojm.Result(0)
 })
 

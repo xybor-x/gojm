@@ -39,7 +39,7 @@ func (m *JobManager) AddPriority(p Priority) {
 // this timeslice, it will be moved to the higher priority. This timeslice is
 // only applied when the priority hasn't its own aging.
 func (m *JobManager) SetDefaultJobAging(timeslice time.Duration) {
-	if err := m.queue.SetCommonAgingTimeSlice(timeslice); err != nil {
+	if err := m.queue.SetDefaultAgingTimeSlice(timeslice); err != nil {
 		panic(err)
 	}
 }
